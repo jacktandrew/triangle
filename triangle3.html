@@ -1,0 +1,240 @@
+<head>
+<style>
+section {float: left;}
+ul {margin: 3px; padding: 3px;}
+h4 {margin: 3px; padding: 3px;}
+.type {margin: 20px 0 0;}
+.sub {width: 200px;}
+.color, .shadow_color, .border_color {width: 100px;}
+input {width: 30px;}
+li {display: inline-block; border: 1px dashed gray; padding: 5px;}
+li.active, li:hover {border: 1px solid black;}
+
+#tri_code, #bor_code {margin-left: 300px;}
+#tri_code strong, #bor_code strong {margin-left: -15px;}
+
+.triangle {
+  position: relative;
+  border-style: solid;
+  border-width: 20px;
+  border-color: transparent;
+  height:0; width:0;
+  line-height: 0;
+  font-size: 0;
+}
+
+#visual {position: absolute; top: 50px; left: 350px;}
+
+.group:before, .group:after {content:""; display:table;}
+.group:after {clear:both;}
+
+.left {border-left-color: gray; margin: 0 -10px 0 10px;}
+.right {border-right-color: gray; margin: 0 10px 0 -10px;}
+.top {border-top-color: gray; margin: 10px 0 -10px 0;}
+.bottom {border-bottom-color: gray; margin: -10px 0 10px 0;}
+.half {border-width: 15px; margin: 5px;}
+
+</style>
+<!-- <script src="http://code.jquery.com/jquery-latest.min.js"></script> -->
+<script src="jquery.min.js"></script>
+<script>
+$(function(){
+  $('li').click(function(){
+    $('li').removeClass('active');
+    $(this).addClass('active');
+  });
+  
+  $('.sub').click(function(){
+    $('#visual, #result').removeClass();
+    var $this = $('li.active').children()
+    var w = $('.width').val();
+    var h = $('.height').val();
+    var c = $('.color').val();
+    var t = $('li.active').children().attr('class')
+    
+    var sh_x = $('.shadow_x').val();
+    var sh_y = $('.shadow_y').val();
+    var sh_b = $('.shadow_blur').val();
+    var sh_c = $('.shadow_color').val();
+    
+    var bor_size = $('.border_width').val();
+    var bor_c = $('.border_color').val();
+    
+    var bor_w = +bor_size * 2 + +w
+    var bor_h = +bor_size * 2 + +h
+    
+    var bor_top = Math.floor(-bor_size)
+    var bor_left = Math.floor(-bor_size)
+    
+    if( $this.hasClass('top') ){
+      w = w / 2
+      bor_w = +bor_size + +w
+      bor_top = Math.floor(-bor_size * 2/3)
+    }
+    
+    if( $this.hasClass('bottom') ){
+      w = w / 2
+      bor_w = +bor_size + +w
+      bor_top = Math.ceil(-bor_size * 10/3)
+    }
+    
+    if( $this.hasClass('left') ){
+      h = h / 2
+      bor_h = +bor_size + +h
+      bor_left = Math.floor(-bor_size * 2/3)
+    }
+    
+    if( $this.hasClass('right') ){
+      h = h / 2
+      bor_h = +bor_size + +h
+      bor_left = Math.ceil(-bor_size * 10/3)
+    }
+
+    if( $this.hasClass('top left') ){
+      bor_w = bor_w +1; bor_h = bor_h +1;
+    }
+
+    if( $this.hasClass('top right') ){
+      bor_w = bor_w +1; bor_h = bor_h +1;
+      bor_left = Math.ceil(-bor_size * 1.5 - 1.5)
+    }
+    
+    if( $this.hasClass('bottom left') ){
+      bor_w = bor_w +1; bor_h = bor_h +1;
+      bor_top = Math.floor(-bor_size * 1.5) - 1
+    }
+    
+    if( $this.hasClass('bottom right') ){
+      bor_w = bor_w +1; bor_h = bor_h +1;
+      bor_top = Math.floor(-bor_size * 1.5) - 1 
+      bor_left = Math.floor(-bor_size * 1.5) - 1
+    }
+    
+    var style = "solid";
+    var width = h + 'px ' + w + 'px';
+    var border_width = bor_h + 'px ' + bor_w + 'px';
+    
+    var code_top = bor_top - h
+    var code_left = bor_left - w
+    
+    var color = $this.data('color').replace(/c/g, c).replace(/_/g, 'transparent');
+    var border_color = $this.data('color').replace(/c/g, bor_c).replace(/_/g, 'transparent');
+    
+    $('#tri_code').html(
+      '<strong>.triangle {</strong><br/>' +
+      'height: 0;<br/>' +
+      'width: 0;<br/>' +
+      'position: relative;<br/>' +
+      'border-style: ' + style + ';<br/>' +
+      'border-width: ' + width + ';<br/>' +
+      'border-color: ' + color + ';<br/>' +
+      '<span><strong>}</strong></span><br/>'
+    );
+
+    if(bor_size !== "") {
+      $('#bor_code').html(
+        '<br/><strong>.triangle:before {</strong><br/>' +
+        'content: "";<br/>' +
+        'position: absolute;<br/>' +
+        'z-index: -1;<br/>' +
+        'top: ' + code_top + 'px;<br/>' +
+        'left: ' + code_left + 'px;<br/>' +
+        'height: 0;<br/>' +
+        'width: 0;<br/>' +
+        'border-style: ' + style + ';<br/>' +
+        'border-width: ' + border_width + ';<br/>' +
+        'border-color: ' + border_color + ';<br/>' +
+        '<span><strong>}</strong></span><br/>'
+      );
+    }
+
+    var sh_code = ' -webkit-filter: drop-shadow(' + sh_x + 'px ' + sh_y + 'px ' + sh_b + 'px ' + sh_c + ');<br/>' +
+                  ' -moz-filter: drop-shadow(' + sh_x + 'px ' + sh_y + 'px ' + sh_b + 'px ' + sh_c + ');<br/>' +
+                  ' -o-filter: drop-shadow(' + sh_x + 'px ' + sh_y + 'px ' + sh_b + 'px ' + sh_c + ');<br/>' +
+                  ' -filter: drop-shadow(' + sh_x + 'px ' + sh_y + 'px ' + sh_b + 'px ' + sh_c + ');<br/>'
+                  
+    var sh_css =  {'-webkit-filter': 'drop-shadow(' + sh_x + 'px ' + sh_y + 'px ' + sh_b + 'px ' + sh_c + ')',
+                  '-moz-filter': 'drop-shadow(' + sh_x + 'px ' + sh_y + 'px ' + sh_b + 'px ' + sh_c + ')',
+                  '-o-filter': 'drop-shadow(' + sh_x + 'px ' + sh_y + 'px ' + sh_b + 'px ' + sh_c + ')',
+                  '-filter': 'drop-shadow(' + sh_x + 'px ' + sh_y + 'px ' + sh_b + 'px ' + sh_c + ')'}
+    
+    if(sh_x !== "" && sh_y !== "" && sh_b !== "" && sh_c !== ""){
+      if(bor_size === "" ){
+        $('#tri_code span').prepend(sh_code);
+        $('#result').css(sh_css);
+      } else {
+        $('#bor_code span').prepend(sh_code);
+        $('#border').css(sh_css);
+      }
+    }
+
+    $('#border').css({
+      'border-style': style, 
+      'border-width': border_width, 
+      'border-color': border_color, 
+      'z-index': -1,
+      position: 'absolute',
+      height: 0,
+      width: 0,
+      top: bor_top,
+      left: bor_left,
+    });
+    
+    $('#result').css({
+      'border-style': style, 
+      'border-width': width, 
+      'border-color': color, 
+      'z-index': 2,
+      height: 0, 
+      width: 0,
+    });
+  });
+});
+</script>
+</head>
+<body>
+<section class="group">
+
+  <h4>Triangle</h4>
+  <label>Width</label>    <input type="text" class="width" value="200"/>
+  <label>Height</label>   <input type="text" class="height" value="200"/>
+  <label>Color</label>    <input type="text" class="color" value="white"/>
+
+  <div class="group">
+    <ul>
+      <li class="active"><div class="triangle left" data-color="_ _ _ c"></div></li>         <!-- height / 2 -->
+      <li><div class="triangle top" data-color="c _ _ _"></div></li>                 <!-- width / 2 -->
+      <li><div class="triangle bottom" data-color="_ _ c _"></div></li>              <!-- width / 2 -->
+      <li><div class="triangle right" data-color="_ c _ _"></div></li>               <!-- height / 2 -->
+      <br/  >
+      <li><div class="triangle half top left" data-color="c _ _ c"></div></li>       <!-- both / 2 -->
+      <li><div class="triangle half bottom left" data-color="_ _ c c"></div></li>    <!-- both / 2 -->
+      <li><div class="triangle half bottom right" data-color="_ c c _"></div></li>   <!-- both / 2 -->
+      <li><div class="triangle half top right" data-color="c c _ _"></div></li>      <!-- both / 2 -->
+    </ul>
+  </div>
+
+  <div class="group">
+    <h4>Shadow</h4>
+    <label>X</label>        <input type="text" class="shadow_x"/>
+    <label>Y</label>        <input type="text" class="shadow_y"/>
+    <label>Blur</label>     <input type="text" class="shadow_blur"/>
+    <label>Color</label>    <input type="text" class="shadow_color"/>
+
+    <h4>Border</h4>
+    <label>Width</label>        <input type="text" class="border_width" value="2"/>
+    <label>Color</label>    <input type="text" class="border_color" value="red"/>
+  </div>
+  <input type="submit" class="sub"/>
+</section>
+
+<section>
+  <div id="visual">
+    <div id="border" class="triangle"></div>
+    <div id="result" class="triangle"></div>
+  </div>
+</section>
+<section> 
+  <div id="tri_code"></div>
+  <div id="bor_code"></div>
+</body>

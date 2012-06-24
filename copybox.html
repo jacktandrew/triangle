@@ -1,0 +1,31 @@
+<head>
+<style>
+section {margin: 50px;}
+.triangle {
+height: 0;
+width: 0;
+position: relative;
+border-style: solid;
+border-width: 100px 100px;
+border-color: white white transparent transparent;
+}
+
+.triangle:before {
+content: "";
+position: absolute;
+z-index: -1;
+top: -102px;
+left: -104px;
+height: 0;
+width: 0;
+border-style: solid;
+border-width: 103px 103px;
+border-color: red red transparent transparent;
+}
+</style>
+</head>
+<body>
+<section>
+  <div class="triangle"></div>
+</section>
+</body>
