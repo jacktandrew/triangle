@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Selector</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="Jack">
+	<script src="knockout.js"></script>
+	<script src="jquery.min.js"></script>
+<style>
+
+section {float: left;}
+ul {margin: 3px; padding: 3px;}
+h4 {margin: 3px; padding: 3px;}
+.type {margin: 20px 0 0;}
+.sub {width: 200px;}
+.color, .shadow_color, .border_color {width: 100px;}
+input {width: 30px;}
+li.box {display: inline-block; border: 1px dashed gray; padding: 5px; position: relative;}
+li.active, li:hover {border: 1px solid black;}
+
+#tri_code, #bor_code {margin-left: 300px;}
+#tri_code strong, #bor_code strong {margin-left: -15px;}
+
+.___c, ._c__, .c___, .__c_ {
+  position: relative;
+  border-style: solid;
+  border-width: 20px;
+  border-color: transparent;
+  height:0; width:0;
+  line-height: 0;
+  font-size: 0;
+}
+
+.___c {border-left-color: gray; margin: 0 -10px 0 10px;}
+._c__ {border-right-color: gray; margin: 0 10px 0 -10px;}
+.c___ {border-top-color: gray; margin: 10px 0 -10px 0;}
+.__c_ {border-bottom-color: gray; margin: -10px 0 10px 0;}
+.half {border-width: 15px; margin: 5px;}
+
+
+#visual {position: absolute; top: 150px; left: 350px; color: gray;}
+
+.group:before, .group:after {content:""; display:table;}
+.group:after {clear:both;}
+
+
+
+input[type=radio] {height: 50px; width: 50px; opacity: 0; display: inline-block; position: absolute; top: -5px; left: -5px; z-index: 100;}
+
+</style>
+</head>
+<body>
+
+  <ul data-bind="foreach: optionValues">
+    <li class="box">
+      <input type="radio" name="triTypes" data-bind="attr: {value: $data}, checked: $root.radioOption" />
+      <div class="triangle" data-bind="attr: {class: $data}"></div>
+    </li>
+  </ul>
+  
+Height:  <input type="text" data-bind='value: triHeight' />
+Width:  <input type="text" data-bind='value: triWidth' />
+Color:  <input type="text" data-bind='value: triColor' />
+  
+<div id="visual" data-bind="attr: {class: radioOption}"></div>
+<div id="code">
+<h3>.triangle {</h3>
+  <label>border-width: </label><span data-bind='text: borderWidth'></span>
+  <!-- <label>border-color:</label><p data-bind='value: borderColor'></p> -->
+<h3>}</h3>
+</div>
+  
+</body>
+<script type="text/javascript">
+var viewModel = function() {
+    this.triHeight = ko.observable("30");
+    this.triWidth = ko.observable("30");
+    this.triColor = ko.observable("gray");
+    this.optionValues = ["c___","_c__","__c_","___c"];
+    this.radioOption = ko.observable("c___");
+    // if (this.radioOption == "c___"){
+      console.log('boooyah')
+    // }
+    this.borderWidth = ko.computed(function() {
+      return this.triHeight() + "px " + this.triWidth() + "px";
+    }, this);  
+    
+};
+ko.applyBindings(new viewModel());
+
+</script>
+</html>
