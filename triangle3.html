@@ -6,7 +6,7 @@ h4 {margin: 3px; padding: 3px;}
 .type {margin: 20px 0 0;}
 .sub {width: 200px;}
 .color, .shadow_color, .border_color {width: 100px;}
-input {width: 30px;}
+input {width: 30px; background: white;}
 li {display: inline-block; border: 1px dashed gray; padding: 5px;}
 li.active, li:hover {border: 1px solid black;}
 
@@ -32,10 +32,29 @@ li.active, li:hover {border: 1px solid black;}
 .right {border-right-color: gray; margin: 0 10px 0 -10px;}
 .top {border-top-color: gray; margin: 10px 0 -10px 0;}
 .bottom {border-bottom-color: gray; margin: -10px 0 10px 0;}
-.half {border-width: 15px; margin: 5px;}
+.half {border-width: 16px; margin: 5px;}
 
 </style>
 <!-- <script src="http://code.jquery.com/jquery-latest.min.js"></script> -->
+
+<script src="knockout-2.1.0.js"></script>
+<script>
+    var viewModel = {
+        width : 
+        height :
+        color :
+        type :
+        shadow_x :
+        shadow_y :
+        shadow_blur :
+        shadow_color :
+        border_size :
+        border_color :
+        
+    }
+</script>
+
+
 <script src="jquery.min.js"></script>
 <script>
 $(function(){
