@@ -17,14 +17,14 @@ h4 {margin: 3px; padding: 3px;}
 .type {margin: 20px 0 0;}
 .sub {width: 200px;}
 .color, .shadow_color, .border_color {width: 100px;}
-input {width: 30px;}
+input {width: 42px;}
 li.box {display: inline-block; border: 1px dashed gray; padding: 5px; position: relative;}
 li.active, li:hover {border: 1px solid black;}
 
 #tri_code, #bor_code {margin-left: 300px;}
 #tri_code strong, #bor_code strong {margin-left: -15px;}
 
-.___c, ._c__, .c___, .__c_ {
+.___c, ._c__, .c___, .__c_, .cc__, ._cc_, .__cc, .c__c, #visual {
   position: relative;
   border-style: solid;
   border-width: 20px;
@@ -34,14 +34,16 @@ li.active, li:hover {border: 1px solid black;}
   font-size: 0;
 }
 
-.___c {border-left-color: gray; margin: 0 -10px 0 10px;}
-._c__ {border-right-color: gray; margin: 0 10px 0 -10px;}
-.c___ {border-top-color: gray; margin: 10px 0 -10px 0;}
-.__c_ {border-bottom-color: gray; margin: -10px 0 10px 0;}
-.half {border-width: 15px; margin: 5px;}
+.___c {border-color: transparent transparent transparent gray; margin: 0 -10px 0 10px;}
+._c__ {border-color: transparent gray transparent transparent; margin: 0 10px 0 -10px;}
+.c___ {border-color: gray transparent transparent transparent; margin: 10px 0 -10px 0;}
+.__c_ {border-color: transparent transparent gray transparent; margin: -10px 0 10px 0;}
+.cc__ {border-color: gray gray transparent transparent; border-width: 15px; margin: 5px;}
+._cc_ {border-color: transparent gray gray transparent; border-width: 15px; margin: 5px;}
+.__cc {border-color: transparent transparent gray gray; border-width: 15px; margin: 5px;}
+.c__c {border-color: gray transparent transparent gray; border-width: 15px; margin: 5px;}
 
-
-#visual {position: absolute; top: 150px; left: 350px; color: gray;}
+#visual {position: absolute; top: 100px; left: 450px;}
 
 .group:before, .group:after {content:""; display:table;}
 .group:after {clear:both;}
@@ -61,29 +63,48 @@ input[type=radio] {height: 50px; width: 50px; opacity: 0; display: inline-block;
     </li>
   </ul>
   
-Height:  <input type="text" data-bind='value: triHeight' />
-Width:  <input type="text" data-bind='value: triWidth' />
-Color:  <input type="text" data-bind='value: triColor' />
+Height: <input type="number" data-bind='value: triHeight, valueUpdate: "afterkeydown"' />
+Width:  <input type="number" data-bind='value: triWidth, valueUpdate: "afterkeydown"' />
+Color:  <input type="text" data-bind='value: triColor, valueUpdate: "afterkeydown"' />
   
-<div id="visual" data-bind="attr: {class: radioOption}"></div>
+<div id="visual" data-bind="style: {borderColor: borColor, borderWidth: borWidth}"></div>
 <div id="code">
 <h3>.triangle {</h3>
-  <label>border-width: </label><span data-bind='text: borderWidth'></span>
-  <!-- <label>border-color:</label><p data-bind='value: borderColor'></p> -->
+  <label>border-width: </label><span data-bind='text: borWidth'></span><br/>
+  <label>triangle type: </label><span data-bind='text: borColor'></span>
 <h3>}</h3>
 </div>
   
 </body>
 <script type="text/javascript">
-var viewModel = function() {
-    this.triHeight = ko.observable("30");
-    this.triWidth = ko.observable("30");
-    this.triColor = ko.observable("gray");
-    this.optionValues = ["c___","_c__","__c_","___c"];
-    this.radioOption = ko.observable("c___");
+$(function(){
+  $('li.box:first-child').addClass('active');
+  $('li').click(function(){
+    $('li').removeClass('active');
+    $(this).addClass('active');
+  });
+});
 
-    this.borderWidth = ko.computed(function() {
-      return this.triHeight() + "px " + this.triWidth() + "px";
+
+var viewModel = function() {
+    
+    this.triHeight = ko.observable("100");
+    this.triWidth = ko.observable("100");
+    this.triColor = ko.observable("gray");
+    this.optionValues = ["c___","_c__","__c_","___c","cc__","_cc_","__cc","c__c"];
+    this.radioOption = ko.observable("c___");
+    this.borColor = ko.computed(function() {
+      return borColor = this.radioOption().replace(/c/gi, this.triColor() + " " ).replace(/_/g, 'transparent ' )
+    }, this);
+
+    this.borWidth = ko.computed(function() {
+      if(this.radioOption() == "___c" || this.radioOption() == "_c__") {
+        return this.triHeight() / 2 + "px " + this.triWidth() + "px";
+      } else if(this.radioOption() == "c___" || this.radioOption() == "__c_") {
+        return this.triHeight() + "px " + this.triWidth() / 2 + "px";
+      } else {
+        return this.triHeight() / 2 + "px " + this.triWidth() / 2 + "px";
+      }
     }, this);  
     
 };

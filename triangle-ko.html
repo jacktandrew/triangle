@@ -52,10 +52,22 @@ input[type="radio"] { position: absolute; z-index: 3; height: 51px; width: 51px;
 
   <div class="group" data-bind="visible: triOps">
     <ul>
-      <li data-bind="checked: triType" class="active"><input type="radio" name="triType" value="left" /><div class="triangle left" ></div></li> <!-- height / 2 -->
-      <li data-bind="checked: triType"><input type="radio" name="triType" value="top" /><div class="triangle top" ></div></li>                 <!-- width / 2 -->
-      <li data-bind="checked: triType"><input type="radio" name="triType" value="bottom" /><div class="triangle bottom" ></div></li>              <!-- width / 2 -->
-      <li data-bind="checked: triType"><input type="radio" name="triType" value="right" /><div class="triangle right" ></div></li>               <!-- height / 2 -->
+      <li class="active">
+        <input type="radio" name="triType" data-bind="checked: self.triType" value="left" />
+        <div class="triangle left" ></div>
+      </li> 
+      <li>
+        <input type="radio" name="triType" data-bind="checked: self.triType" value="top" />
+        <div class="triangle top" ></div>
+      </li>
+      <li>
+        <input type="radio" name="triType" data-bind="checked: self.triType" value="bottom" />
+        <div class="triangle bottom" ></div>
+      </li>
+      <li>
+        <input type="radio" name="triType" data-bind="checked: self.triType" value="right" />
+        <div class="triangle right" ></div>
+      </li>
       <br/>
       <!-- <li data-bind="click: $dat.triType()"><div class="triangle half top left" data-color="c _ _ c"></div></li>       
       <li data-bind="click: $dat.triType()"><div class="triangle half bottom left" data-color="_ c _ c"></div></li>    
@@ -67,7 +79,7 @@ input[type="radio"] { position: absolute; z-index: 3; height: 51px; width: 51px;
 
 <section>
   <div id="visual">
-    <div id="result" class="triangle"></div>
+    <div id="result" class="triangle" data-bind="style: { borderColor: triColor, borderWidth: widthCode}"></div>
   </div>
 </section>
 <section> 
@@ -78,7 +90,7 @@ input[type="radio"] { position: absolute; z-index: 3; height: 51px; width: 51px;
     <p>position: relative;</p>
     <p>border-style: solid;</p>
     <p>border-width: <span data-bind="text: widthCode"></span></p>
-    <p>border-color: <span data-bind="text: triOps"></span></p>
+    <p>border-color: <span data-bind="text: triType"></span></p>
     <p><strong>}</strong></p>
   </div>
 </body>
@@ -95,11 +107,21 @@ function AppViewModel() {
   self.triWidth = ko.observable("100");
   self.triHeight = ko.observable("100");
   self.triColor = ko.observable("Blue");
-  self.widthCode = ko.computed(function() {
-      return this.triHeight() + 'px ' + this.triWidth() + 'px';
-  }, this);
   self.triOps = ko.observable(true);
-  self.triType = ko.observable('left');
+  self.triType = ko.observable('left');  
+  
+  self.widthCode = ko.computed(function() {
+    if(self.triType() === 'left' || self.triType() === 'right'){
+      return self.triHeight() / 2 + 'px ' + self.triWidth() + 'px';
+    } else {
+      return self.triHeight() + 'px ' + self.triWidth() / 2 + 'px';
+    }
+  });
+
+   // console.log(self.triType())  
+  
+  
+  
   // self.triType = ko.observableArray(['left','top','bottom','right']);
 
 
