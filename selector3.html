@@ -81,9 +81,7 @@ var viewModel = function() {
     this.triColor = ko.observable("gray");
     this.optionValues = ["c___","_c__","__c_","___c"];
     this.radioOption = ko.observable("c___");
-    // if (this.radioOption == "c___"){
-      console.log('boooyah')
-    // }
+
     this.borderWidth = ko.computed(function() {
       return this.triHeight() + "px " + this.triWidth() + "px";
     }, this);  
