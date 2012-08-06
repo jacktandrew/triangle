@@ -1,0 +1,140 @@
+<head>
+<style>
+section {float: left;}
+ul {margin: 3px; padding: 3px;}
+h4 {margin: 3px; padding: 3px;}
+.type {margin: 20px 0 0;}
+.sub {width: 200px;}
+.color, .shadow_color, .border_color {width: 100px;}
+input {width: 30px; background: white;}
+li {display: inline-block; border: 1px dashed gray; padding: 5px; position: relative;}
+li.active, li:hover {border: 1px solid black;}
+
+#tri_code, #bor_code {margin-left: 300px;}
+#tri_code strong, #bor_code strong {margin-left: -15px;}
+
+input[type="radio"] { position: absolute; z-index: 3; height: 51px; width: 51px; top: -3px; left: -3px; visibility: hidden; }
+
+
+.triangle {
+  position: relative;
+  border-style: solid;
+  border-width: 20px;
+  border-color: transparent;
+  height:0; width:0;
+  line-height: 0;
+  font-size: 0;
+}
+
+#visual {position: absolute; top: 50px; left: 350px;}
+
+.group:before, .group:after {content:""; display:table;}
+.group:after {clear:both;}
+
+.left {border-left-color: gray; margin: 0 -10px 0 10px;}
+.right {border-right-color: gray; margin: 0 10px 0 -10px;}
+.top {border-top-color: gray; margin: 10px 0 -10px 0;}
+.bottom {border-bottom-color: gray; margin: -10px 0 10px 0;}
+.half {border-width: 16px; margin: 5px;}
+
+</style>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<!-- <script src="jquery.min.js"></script> -->
+<script src="knockout-2.1.0.js"></script>
+</head>
+<body>
+<section class="group">
+
+  <h4>Triangle</h4>
+  <label>Width</label>    <input data-bind="value: triWidth" />
+  <label>Height</label>   <input data-bind="value: triHeight" />
+  <label>Color</label>    <input data-bind="value: triColor" />
+
+  <div class="group" data-bind="visible: triOps">
+    <ul>
+      <li data-bind="checked: triType" class="active"><input type="radio" name="triType" value="left" /><div class="triangle left" ></div></li> <!-- height / 2 -->
+      <li data-bind="checked: triType"><input type="radio" name="triType" value="top" /><div class="triangle top" ></div></li>                 <!-- width / 2 -->
+      <li data-bind="checked: triType"><input type="radio" name="triType" value="bottom" /><div class="triangle bottom" ></div></li>              <!-- width / 2 -->
+      <li data-bind="checked: triType"><input type="radio" name="triType" value="right" /><div class="triangle right" ></div></li>               <!-- height / 2 -->
+      <br/>
+      <!-- <li data-bind="click: $dat.triType()"><div class="triangle half top left" data-color="c _ _ c"></div></li>       
+      <li data-bind="click: $dat.triType()"><div class="triangle half bottom left" data-color="_ c _ c"></div></li>    
+      <li data-bind="click: $dat.triType()"><div class="triangle half bottom right" data-color="_ c c _"></div></li>   
+      <li data-bind="click: $dat.triType()"><div class="triangle half top right" data-color="c c _ _"></div></li>       -->
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div id="visual">
+    <div id="result" class="triangle"></div>
+  </div>
+</section>
+<section> 
+  <div id="tri_code">
+    <p><strong>.triangle {</strong></p>
+    <p>height: 0;</p>
+    <p>width: 0;</p>
+    <p>position: relative;</p>
+    <p>border-style: solid;</p>
+    <p>border-width: <span data-bind="text: widthCode"></span></p>
+    <p>border-color: <span data-bind="text: triOps"></span></p>
+    <p><strong>}</strong></p>
+  </div>
+</body>
+<script>
+$(function(){
+  $('li').click(function(){
+    $('li').removeClass('active');
+    $(this).addClass('active');
+  });
+});
+
+function AppViewModel() {
+  var self = this;
+  self.triWidth = ko.observable("100");
+  self.triHeight = ko.observable("100");
+  self.triColor = ko.observable("Blue");
+  self.widthCode = ko.computed(function() {
+      return this.triHeight() + 'px ' + this.triWidth() + 'px';
+  }, this);
+  self.triOps = ko.observable(true);
+  self.triType = ko.observable('left');
+  // self.triType = ko.observableArray(['left','top','bottom','right']);
+
+
+
+  // $('#result').css({
+  //   'border-style': 'solid',
+  //   'border-width': this.widthCode,
+  //   'border-color': this.triType(), 
+  //   'z-index': 2,
+  //   height: 0, 
+  //   width: 0,
+  // });
+}
+
+ko.applyBindings(new AppViewModel());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
