@@ -21,7 +21,7 @@ h4 {margin: 3px; padding: 3px;}
 input[type=radio] {height: 50px; width: 50px; opacity: 0; display: 
   inline-block; position: absolute; top: -5px; left: -5px; z-index: 100;}
 input {width: 42px; margin-right: 10px;}
-input[type=text] {width: 80px;}
+input[type=text] {width: 100px;}
 li.box {display: inline-block; border: 1px dashed gray; padding: 5px; position: relative;}
 li.active, li:hover {border: 1px solid black;}
 
@@ -76,7 +76,7 @@ section {position: relative; float: left; margin: 25px;}
     <h4>Border</h4>
     X Offset: <input type="number" data-bind='value: borderX, valueUpdate: "afterkeydown"' />
     Y Offset:  <input type="number" data-bind='value: borderY, valueUpdate: "afterkeydown"' />
-    Width:  <input type="number" data-bind='value: borderW, valueUpdate: "afterkeydown"' />
+    Width:  <input type="number" data-bind='value: borderS, valueUpdate: "afterkeydown"' />
     Color:  <input type="text" data-bind='value: borderC, valueUpdate: "afterkeydown"' />
   </section> 
 
@@ -136,7 +136,7 @@ $(function(){
 
 var viewModel = function() {
   this.optionValues = ["c___","_c__","__c_","___c","cc__","_cc_","__cc","c__c"];
-  this.triColor = ko.observable("wheat");
+  this.triColor = ko.observable("yellow");
   this.radioOption = ko.observable("c___");
   this.triangleColor = ko.computed(function() {
     return triangleColor = this.radioOption().replace(/c/gi, this.triColor() + " " ).replace(/_/g, 'transparent ' )
@@ -170,47 +170,16 @@ var viewModel = function() {
   
   this.borderS = ko.observable("2");
   this.bordWidth = ko.computed(function() {
-    borW = +this.borderS() + +this.triWidth()
-    borH = +this.borderS() + +this.triHeight()
-    
-    if(this.radioOption() == "c___") {
-      // borW = +this.borderS() + +this.triWidth()
-      borMargTop = Math.floor(-this.borderS() * 2/3)
-    } else if (this.radioOption() == "_c__") {
-      // borH = +this.borderS() + +this.triHeight()
-      borMargLeft = Math.ceil(-this.borderS() * 10/3)
-    } else if (this.radioOption() == "__c_") {
-      // borW = +this.borderS() + +this.triWidth()
-      borMargTop = Math.ceil(-this.borderS() * 10/3)
-    } else if (this.radioOption() == "___c") {
-      // borH = +this.borderS() + +this.triHeight()
-      borMargLeft = Math.floor(-this.borderS() * 2/3)  
-    } else if (this.radioOption() == "cc__") {
-      borW = borW +1; 
-      borH = borH +1;
-      borMargLeft = Math.ceil(-this.borderS() * 1.5 - 1.5)
-    } else if (this.radioOption() == "_cc_") {
-      borW = borW +1; 
-      borH = borH +1;
-      borMargTop = Math.floor(-this.borderS() * 1.5) - 1 
-      borMargLeft = Math.floor(-this.borderS() * 1.5) - 1
-    } else if (this.radioOption() == "__cc") {
-      borW = borW +1; 
-      borH = borH +1;
-      borMargTop = Math.floor(-this.borderS() * 1.5) - 1
-    } else if (this.radioOption() == "c__c") {
-      borW = borW +1; 
-      borH = borH +1;
+    if(this.radioOption() == "___c" || this.radioOption() == "_c__") {
+      return (+this.triHeight() / 2 + +this.borderS()) + "px " + (+this.triWidth() + +this.borderS()) + "px";
+    } else if(this.radioOption() == "c___" || this.radioOption() == "__c_") {
+      return (+this.triHeight() + +this.borderS()) + "px " + (+this.triWidth() / 2 + +this.borderS()) + "px";
+    } else {
+      return (+this.triHeight() / 2 + +this.borderS()) + "px " + (+this.triWidth() / 2 + +this.borderS()) + "px";
     }
-    
-//      return (+this.triHeight() / 2 + +this.borderW()) + "px " + (+this.triWidth() + +this.borderW()) + "px";
-
-//      return (+this.triHeight() + +this.borderW()) + "px " + (+this.triWidth() / 2 + +this.borderW()) + "px";
-    
-    // }
   }, this);  
 
-  this.borderC = ko.observable("red");
+  this.borderC = ko.observable("rgba(0,255,0,0.5)");
   this.bordColor = ko.computed(function() {
     return bordColor = this.radioOption().replace(/c/gi, this.borderC() + " " ).replace(/_/g, 'transparent ' )
   }, this);
