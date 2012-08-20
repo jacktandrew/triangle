@@ -9,6 +9,7 @@
 	<meta name="author" content="Jack">
 	<script src="knockout.js"></script>
 	<script src="jquery.min.js"></script>
+  <script src="jquery.zclip.min.js"></script>
 <style>
 .group:before, .group:after {content:""; display:table;}
 .group:after {clear:both;}
@@ -24,12 +25,21 @@ input {width: 42px; margin-right: 10px;}
 input[type=text] {width: 80px;}
 input[type=checkbox] {}
 li.box {display: inline-block; border: 1px dashed gray; padding: 5px; position: relative;}
-li.active, li:hover {border: 1px solid black;}
+ul li.box.active, ul li.box:hover {border: 1px solid black; background: #EEE;}
+ul li.box {opacity: .5;}
+ul li.box:hover, ul li.box.active {opacity: 1;}
+
 
 #code .triangle .shadow {display: none;}
+#code { background: #EEE; width: 500px; padding: 30px 60px; border-radius: 20px; border: 1px solid black; margin: 30px 0 0 0;}
+#copy {background: #DDD; border: 1px solid gray; display: block; float: right; border-radius: 3px; padding: 3px 20px;}
+#copy:hover {background: #999; cursor: pointer;} 
 
-.declarations {margin-left: 20px;}
-#tri_code strong, #bor_code strong {margin-left: -15px;}
+#code ol {list-style-type:decimal-leading-zero;}
+#code .triangle, #code .border {border-left: 1px solid black;}
+#code li {padding-left: 30px;}
+#code li.outdent {padding-left: 10px;}
+
 
 #visual {position: absolute; top: 100px; left: 550px;}
 #visual .triangle, #visual .border {height:0; width:0; border-style: solid; position: relative;}
@@ -44,15 +54,15 @@ li.active, li:hover {border: 1px solid black;}
   line-height: 0;
   font-size: 0;
 }
-.___c {border-color: transparent transparent transparent gray; margin: 0 -10px 0 10px;}
-._c__ {border-color: transparent gray transparent transparent; margin: 0 10px 0 -10px;}
-.c___ {border-color: gray transparent transparent transparent; margin: 10px 0 -10px 0;}
-.__c_ {border-color: transparent transparent gray transparent; margin: -10px 0 10px 0;}
+.___c {border-color: transparent transparent transparent black; margin: 0 -10px 0 10px;}
+._c__ {border-color: transparent black transparent transparent; margin: 0 10px 0 -10px;}
+.c___ {border-color: black transparent transparent transparent; margin: 10px 0 -10px 0;}
+.__c_ {border-color: transparent transparent black transparent; margin: -10px 0 10px 0;}
 .cc__, ._cc_, .__cc, .c__c {border-width: 15px; margin: 5px;}
-.cc__ {border-color: gray gray transparent transparent;}
-._cc_ {border-color: transparent gray gray transparent;}
-.__cc {border-color: transparent transparent gray gray;}
-.c__c {border-color: gray transparent transparent gray;}
+.cc__ {border-color: black black transparent transparent;}
+._cc_ {border-color: transparent black black transparent;}
+.__cc {border-color: transparent transparent black black;}
+.c__c {border-color: black transparent transparent black;}
 </style>
 </head>
 <body>
@@ -91,87 +101,81 @@ Color: <input type="text" data-bind='value: borderC, valueUpdate: "afterkeydown"
 </div>
 
 <div id="code">
-  <br/>
-  &lt;div class="border" &gt;&lt;/div&gt;
-  <br/>
-  &lt;div class="triangle" &gt;&lt;/div&gt;
-  
-  
+  <!-- &lt;div class="border" &gt;&lt;/div&gt;
+  &lt;div class="triangle" &gt;&lt;/div&gt; -->
+  <a id="copy">Copy</a>
+  <ol>
   <div class="triangle">
-    <h3>.triangle {</h3>
-      <div class="declarations triangle">
-        <label>height: </label><span>0</span>;<br/>
-        <label>width: </label><span>0</span>;<br/>
-        <label>border-style: </label><span>solid</span>;<br/>
-        <label>border-width: </label><span data-bind='text: triangleWidth'></span>;<br/>
-        <label>border-color: </label><span data-bind='text: triangleColor'></span>;<br/>
-
-        <div class="shadow">
-          <br/>
-          <label>-webkit-filter: drop-shadow(</label>
-            <span data-bind='text: shadowX'></span>px&nbsp;
-            <span data-bind='text: shadowY'></span>px&nbsp;
-            <span data-bind='text: shadowB'></span>px&nbsp;
-            <span data-bind='text: shadowC'></span>);<br/>
-          <label>-moz-filter: drop-shadow(</label>
-            <span data-bind='text: shadowX'></span>px&nbsp;
-            <span data-bind='text: shadowY'></span>px&nbsp;
-            <span data-bind='text: shadowB'></span>px&nbsp;
-            <span data-bind='text: shadowC'></span>);<br/>
-          <label>-o-filter: drop-shadow(</label>
-            <span data-bind='text: shadowX'></span>px&nbsp;
-            <span data-bind='text: shadowY'></span>px&nbsp;
-            <span data-bind='text: shadowB'></span>px&nbsp;
-            <span data-bind='text: shadowC'></span>);<br/>
-          <label>-filter: drop-shadow(</label>
-            <span data-bind='text: shadowX'></span>px&nbsp;
-            <span data-bind='text: shadowY'></span>px&nbsp;
-            <span data-bind='text: shadowB'></span>px&nbsp;
-            <span data-bind='text: shadowC'></span>);<br/>
-          </div>
-      </div>
-    <h3>}</h3>
+    <li class="outdent">.triangle {</li>
+    <li><label>height: </label><span>0</span>;</li>
+    <li><label>width: </label><span>0</span>;</li>
+    <li><label>border-style: </label><span>solid</span>;</li>
+    <li><label>border-width: </label><span data-bind='text: triangleWidth'></span>;</li>
+    <li><label>border-color: </label><span data-bind='text: triangleColor'></span>;</li>
+    <div class="shadow">
+      <li><label>-webkit-filter: drop-shadow(</label>
+        <span data-bind='text: shadowX'></span>px&nbsp;
+        <span data-bind='text: shadowY'></span>px&nbsp;
+        <span data-bind='text: shadowB'></span>px&nbsp;
+        <span data-bind='text: shadowC'></span>);</li>
+      <li><label>-moz-filter: drop-shadow(</label>
+        <span data-bind='text: shadowX'></span>px&nbsp;
+        <span data-bind='text: shadowY'></span>px&nbsp;
+        <span data-bind='text: shadowB'></span>px&nbsp;
+        <span data-bind='text: shadowC'></span>);</li>
+      <li><label>-o-filter: drop-shadow(</label>
+        <span data-bind='text: shadowX'></span>px&nbsp;
+        <span data-bind='text: shadowY'></span>px&nbsp;
+        <span data-bind='text: shadowB'></span>px&nbsp;
+        <span data-bind='text: shadowC'></span>);</li>
+      <li><label>-filter: drop-shadow(</label>
+        <span data-bind='text: shadowX'></span>px&nbsp;
+        <span data-bind='text: shadowY'></span>px&nbsp;
+        <span data-bind='text: shadowB'></span>px&nbsp;
+        <span data-bind='text: shadowC'></span>);</li>
+    </div>  <!-- end div.shadow -->
+    <li class="outdent">}</li>
+    <li></li>
   </div>
+
   <div class="border">
-    <h3>.border {</h3>
-      <div class="declarations">
-        <label>position: </label><span>absolute</span>;<br/>
-        <label>top: </label><span>0</span>;<br/>
-        <label>left: </label><span>0</span>;<br/>
-        <label>height: </label><span>0</span>;<br/>
-        <label>width: </label><span>0</span>;<br/>
-        <label>border-style: </label><span>solid</span>;<br/>
-        <label>border-width: </label><span data-bind='text: widthOfBorder'></span>;<br/>
-        <label>border-color: </label><span data-bind='text: colorOfBorder'></span>;<br/>
-        <label>margin: </label><span data-bind='text: marginOfBorder'></span>;<br/>
+    <li class="outdent">.border {</li>
+        <li><label>position: </label><span>absolute</span>;</li>
+        <li><label>top: </label><span>0</span>;</li>
+        <li><label>left: </label><span>0</span>;</li>
+        <li><label>height: </label><span>0</span>;</li>
+        <li><label>width: </label><span>0</span>;</li>
+        <li><label>border-style: </label><span>solid</span>;</li>
+        <li><label>border-width: </label><span data-bind='text: widthOfBorder'></span>;</li>
+        <li><label>border-color: </label><span data-bind='text: colorOfBorder'></span>;</li>
+        <li><label>margin: </label><span data-bind='text: marginOfBorder'></span>;</li>
 
         <div class="shadow">
-          <br/>
-          <label>-webkit-filter: drop-shadow(</label>
+          <li><label>-webkit-filter: drop-shadow(</label>
             <span data-bind='text: shadowX'></span>px &nbsp;
             <span data-bind='text: shadowY'></span>px &nbsp;
             <span data-bind='text: shadowB'></span>px &nbsp;
-            <span data-bind='text: shadowC'></span>);<br/>
-          <label>-moz-filter: drop-shadow(</label>
+            <span data-bind='text: shadowC'></span>);</li>
+          <li><label>-moz-filter: drop-shadow(</label>
             <span data-bind='text: shadowX'></span>px &nbsp;
             <span data-bind='text: shadowY'></span>px &nbsp;
             <span data-bind='text: shadowB'></span>px &nbsp;
-            <span data-bind='text: shadowC'></span>);<br/>
-          <label>-o-filter: drop-shadow(</label>
+            <span data-bind='text: shadowC'></span>);</li>
+          <li><label>-o-filter: drop-shadow(</label>
             <span data-bind='text: shadowX'></span>px &nbsp;
             <span data-bind='text: shadowY'></span>px &nbsp;
             <span data-bind='text: shadowB'></span>px &nbsp;
-            <span data-bind='text: shadowC'></span>);<br/>
-          <label>-filter: drop-shadow(</label>
+            <span data-bind='text: shadowC'></span>);</li>
+          <li><label>-filter: drop-shadow(</label>
             <span data-bind='text: shadowX'></span>px &nbsp;
             <span data-bind='text: shadowY'></span>px &nbsp;
             <span data-bind='text: shadowB'></span>px &nbsp;
-            <span data-bind='text: shadowC'></span>);<br/>
-          </div>
-      </div>
-    <h3>}</h3>
-  </div>
-</div>
+            <span data-bind='text: shadowC'></span>);</li>
+          </div> <!-- end div.shadow -->
+    <li class="outdent">}</li>
+    <li></li>
+  </ol>
+</div>  <!-- end div#code -->
 
 
 
@@ -204,6 +208,16 @@ $(function(){
       $('#code .border, #code .border .shadow, #visual .border').hide();
     }
   });
+  
+  $('a#copy').zclip('show');
+  $('a#copy').hover(function(){
+    console.log('click');
+  });
+  $('a#copy').zclip({
+    path:'ZeroClipboard.swf',
+    copy:$('#code ol').text()
+  });
+  
 });
 
 
@@ -213,18 +227,18 @@ var viewModel = function() {
     this.triColor = ko.observable("yellow");
     this.radioOption = ko.observable("c___");
     this.triangleColor = ko.computed(function() {
-      return this.radioOption().replace(/c/gi, this.triColor() + " " ).replace(/_/g, 'transparent ' )
+      return this.radioOption().replace(/c/gi, ' ' + this.triColor()).replace(/_/g, ' transparent' )
     }, this);
 
     this.triHeight = ko.observable(100);
     this.triWidth = ko.observable(100);
     this.triangleWidth = ko.computed(function() {
       if(this.radioOption() == "___c" || this.radioOption() == "_c__") {
-        return this.triHeight() / 2 + "px " + this.triWidth() + "px";
+        return  this.triHeight() / 2  + "px "   +   this.triWidth() + "px";
       } else if(this.radioOption() == "c___" || this.radioOption() == "__c_") {
-        return this.triHeight() + "px " + this.triWidth() / 2 + "px";
+        return  this.triHeight()     + "px "    +   this.triWidth() / 2 + "px";
       } else {
-        return this.triHeight() / 2 + "px " + this.triWidth() / 2 + "px";
+        return  this.triHeight() / 2  + "px "   +   this.triWidth() / 2 + "px";
       }
     }, this);  
     
@@ -258,16 +272,16 @@ var viewModel = function() {
     this.borderC = ko.observable("green");
     this.colorOfBorder = ko.computed(function() {
       if (this.borderBoole() == true) {
-        return this.radioOption().replace(/c/gi, this.borderC() + " " ).replace(/_/g, 'transparent ' )
+        return this.radioOption().replace(/c/gi, " " + this.borderC() ).replace(/_/g, ' transparent' )
       }
     }, this);
     
     this.borderW = ko.observable(8);    
     this.widthOfBorder = ko.computed(function() {
       if        (this.radioOption() == "___c"   ||  this.radioOption() == "_c__") {
-        return  (this.triHeight() / 2 +   this.borderW() / 2 )  + "px " +   (this.triWidth()      +  +this.borderW() ) + "px";
+        return  (this.triHeight() / 2 +   this.borderW() / 2 )  + "px " +   (+this.triWidth()     +  +this.borderW() ) + "px";
       } else if (this.radioOption() == "c___"   ||  this.radioOption() == "__c_") {
-        return  (this.triHeight()     +  +this.borderW() )      + "px " +   (this.triWidth() / 2  +   this.borderW() / 2 ) + "px";
+        return  (+this.triHeight()    +  +this.borderW() )      + "px " +   (this.triWidth() / 2  +   this.borderW() / 2 ) + "px";
       } else {
         return  (this.triHeight() / 2 +   this.borderW() / 2 )  + "px " +   (this.triWidth() / 2  +   this.borderW() / 2 ) + "px";
       }
