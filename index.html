@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Pure CSS Triangle Builder</title>
+    <meta name="description" content="A compilation of Jack's development work">
+    <meta name="viewport" content="width=680">
+    
+    <link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="all" />
+    
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="scripts/libraries/knockout.js"></script>
+    <script type="text/javascript" src="scripts/tri.ko.js"></script>
+  </head>
+  <body>
+    <h1>Pure CSS Triangle Builder</h1>
+
+    <div id="tri_maker" class="group">
+        <ul data-bind="foreach: optionValues">
+          <li class="box">
+            <input type="radio" name="triTypes" data-bind="attr: {value: $data}, checked: $root.radioOption" />
+            <div data-bind="attr: {class: $data}"></div>
+          </li>
+        </ul>
+      <h4>Triangle<input type="checkbox" data-link="triangle" data-bind='checked: triangleBoole'></h4>
+      <div class="triangle">
+        Height: <input type="number" data-bind='value: triHeight, valueUpdate: "afterkeydown"' />
+        Width:  <input type="number" data-bind='value: triWidth, valueUpdate: "afterkeydown"' />
+        Color:  <input type="text" data-bind='value: triColor, valueUpdate: "afterkeydown"' />
+      </div>
+      
+      <h4>Shadow<input type="checkbox" class="shadow_check" data-link="shadow" data-bind='checked: shadowBoole'></h4>
+      <div class="shadow">
+        Y Offset:  <input type="number" data-bind='value: shadowY, valueUpdate: "afterkeydown"' />
+        X Offset: <input type="number" data-bind='value: shadowX, valueUpdate: "afterkeydown"' />
+        Blur:  <input type="number" data-bind='value: shadowB, valueUpdate: "afterkeydown"' />
+        Color:  <input type="text" data-bind='value: shadowC, valueUpdate: "afterkeydown"' />
+      </div>
+      
+      <h4>Border<input type="checkbox" class="border_check" data-link="border" data-bind='checked: borderBoole'></h4>
+      <div class="border"> 
+        Y Offset: <input type="number" data-bind='value: borderY, valueUpdate: "afterkeydown"' />
+        X Offset: <input type="number" data-bind='value: borderX, valueUpdate: "afterkeydown"' />
+        Width: <input type="number" data-bind='value: borderW, valueUpdate: "afterkeydown"' />
+        Color: <input type="text" data-bind='value: borderC, valueUpdate: "afterkeydown"' />
+      </div>
+      
+      <h4>Rotation<input type="checkbox" class="rotation_check" data-link="rotation" data-bind='checked: rotationBoole'></h4>
+      <div class="rotation"> 
+        Degree: <input type="number" data-bind='value: degree, valueUpdate: "afterkeydown"' />
+      </div>
+
+
+      <div id="visual">
+        <div class="border" data-bind="style: {borderColor: colorOfBorder, borderWidth: widthOfBorder, webkitFilter: borderShadowCode, margin: marginOfBorder, webkitTransform: degreeOfRotate}"></div>
+        <div class="triangle" data-bind="style: {borderColor: triangleColor, borderWidth: triangleWidth, webkitFilter: triangleShadowCode, webkitTransform: degreeOfRotate}"></div>
+      </div>
+      <div class="code">
+        <!-- <a class="copy">Copy</a> -->
+        <ol>
+          <li class="border">&lt;div class="border <span class="shadow">shadow</span> <span class="rotation">rotation</span>"&gt;&lt;/div&gt;</li>
+          <li class="triangle">&lt;div class="triangle <span class="shadow">shadow</span> <span class="rotation">rotation</span>"&gt;&lt;/div&gt;</li>
+          <li></li>
+        </ol>
+      </div>  <!-- end div.code -->
+
+      <div class="code">
+        <!-- <a class="copy">Copy</a> -->
+        <ol>
+          <div class="triangle">
+            <li>.triangle {</li><div class="indent">
+              <li><label>height: </label><span>0</span>;</li>
+              <li><label>width: </label><span>0</span>;</li>
+              <li><label>border-style: </label><span>solid</span>;</li>
+              <li><label>border-width: </label><span data-bind='text: triangleWidth'></span>;</li>
+              <li><label>border-color: </label><span data-bind='text: triangleColor'></span>;</li></div> <!-- end .indent -->
+            <li>}</li></div> <!-- end div.triangle -->
+          <div class="shadow">
+            <li>.shadow {</li><div class="indent">
+              <li><label>-webkit-filter: drop-shadow(</label><span data-bind='text: shadowX'></span>px <span data-bind='text: shadowY'></span>px <span data-bind='text: shadowB'></span>px <span data-bind='text: shadowC'></span>);</li>
+              <li><label>-moz-filter: drop-shadow(</label><span data-bind='text: shadowX'></span>px <span data-bind='text: shadowY'></span>px <span data-bind='text: shadowB'></span>px <span data-bind='text: shadowC'></span>);</li>
+              <li><label>-o-filter: drop-shadow(</label><span data-bind='text: shadowX'></span>px <span data-bind='text: shadowY'></span>px <span data-bind='text: shadowB'></span>px <span data-bind='text: shadowC'></span>);</li>
+              <li><label>-filter: drop-shadow(</label><span data-bind='text: shadowX'></span>px <span data-bind='text: shadowY'></span>px <span data-bind='text: shadowB'></span>px <span data-bind='text: shadowC'></span>);</li></div> <!-- end .indent -->
+            <li>}</li></div> <!-- end div.shadow -->
+          <div class="border">
+            <li>.border {</li><div class="indent">
+              <li><label>position: </label><span>absolute</span>;</li>
+              <li><label>top: </label><span>0</span>;</li>
+              <li><label>left: </label><span>0</span>;</li>
+              <li><label>height: </label><span>0</span>;</li>
+              <li><label>width: </label><span>0</span>;</li>
+              <li><label>border-style: </label><span>solid</span>;</li>
+              <li><label>border-width: </label><span data-bind='text: widthOfBorder'></span>;</li>
+              <li><label>border-color: </label><span data-bind='text: colorOfBorder'></span>;</li>
+              <li><label>margin: </label><span data-bind='text: marginOfBorder'></span>;</li></div> <!-- end .indent -->
+            <li>}</li></div> <!-- end div.border -->
+          <div class="rotation">
+            <li>.rotation {</li><div class="indent">
+              <li><label>-webkit-transform: </label><span data-bind='text: degreeOfRotate'></span>;</li>
+              <li><label>-moz-transform: </label><span data-bind='text: degreeOfRotate'></span>;</li>
+              <li><label>-ms-transform: </label><span data-bind='text: degreeOfRotate'></span>;</li>
+              <li><label>-o-transform: </label><span data-bind='text: degreeOfRotate'></span>;</li>
+              <li><label>transform: </label><span data-bind='text: degreeOfRotate'></span>;</li></div> <!-- end .indent -->
+            <li>}</li></div> <!-- end div.rotation -->
+              <li></li></ol></div>  <!-- end div#code -->
+    </div>  <!-- end #tri_maker -->
+  </body>
+</html>

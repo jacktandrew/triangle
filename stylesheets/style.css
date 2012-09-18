@@ -1,0 +1,47 @@
+#tri_maker {margin: 40px; position: relative}
+ul {margin: 3px; padding: 3px;}
+h4 {margin: 3px 3px 3px -10px; padding: 3px; font-weight: bold}
+.type {margin: 20px 0 0;}
+.sub {width: 200px;}
+.color, .shadow_color, .border_color {width: 100px;}
+input[type=radio] {height: 50px; width: 50px; opacity: 0; display: 
+  inline-block; position: absolute; top: -5px; left: -5px; z-index: 100;}
+input {width: 42px; margin-right: 10px;}
+input[type=text] {width: 80px;}
+li.box {display: inline-block; border: 1px dashed gray; padding: 5px; position: relative;}
+ul li.box.active, ul li.box:hover {border: 1px solid black; background: #EEE;}
+ul li.box {opacity: .5;}
+ul li.box:hover, ul li.box.active {opacity: 1;}
+
+.code {font-family: courier; background: #EEE; width: 620px; padding: 20px 20px 20px 60px; border-radius: 20px; border: 1px solid black; margin: 30px 0 0 0;}
+.copy {background: #DDD; border: 1px solid gray; display: block; float: right; border-radius: 3px; padding: 3px 20px;}
+.copy:hover {background: #999; cursor: pointer;} 
+.code .triangle .shadow {display: none;}
+.code ol {border-left: 1px solid gray;}
+.code ol li {list-style-type: decimal-leading-zero; padding-left: 20px;}
+.code .indent li {padding-left: 40px;}
+
+
+#visual {position: absolute; top: 20px; left: 550px;}
+#visual .triangle, #visual .border {height:0; width:0; border-style: solid; position: relative;}
+#visual .border {position: absolute; top: 0; left: 0;}
+
+
+.___c, ._c__, .c___, .__c_, .cc__, ._cc_, .__cc, .c__c {
+  position: relative;
+  border-style: solid;
+  border-width: 20px;
+  border-color: transparent;
+  height:0; width:0;
+  line-height: 0;
+  font-size: 0;
+}
+.___c {border-color: transparent transparent transparent black; margin: 0 -10px 0 10px;}
+._c__ {border-color: transparent black transparent transparent; margin: 0 10px 0 -10px;}
+.c___ {border-color: black transparent transparent transparent; margin: 10px 0 -10px 0;}
+.__c_ {border-color: transparent transparent black transparent; margin: -10px 0 10px 0;}
+.cc__, ._cc_, .__cc, .c__c {border-width: 15px; margin: 5px;}
+.cc__ {border-color: black black transparent transparent;}
+._cc_ {border-color: transparent black black transparent;}
+.__cc {border-color: transparent transparent black black;}
+.c__c {border-color: black transparent transparent black;}
